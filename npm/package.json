@@ -25,6 +25,7 @@
     "index.js"
   ],
   "dependencies": {
+    "fire-fs": "0.2.3",
     "rimraf": "^2.6.2"
   }
 }

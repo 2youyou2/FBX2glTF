@@ -1,5 +1,5 @@
 const childProcess = require('child_process');
-const fs = require('fs');
+const fs = require('fire-fs');
 const os = require('os');
 const path = require('path');
 const rimraf = require('rimraf');
@@ -39,11 +39,19 @@ function convert(srcFile, destFile, opts = []) {
       }
 
       let destDir = path.dirname(destFile);
-      let destPath = path.join(destDir, path.basename(destFile, destExt));
+      let destFileName = path.basename(destFile, destExt);
+      let destPath = path.join(destDir, destFileName);
 
       let args = opts.slice(0);
-      args.push('--input', srcFile, '--output', destPath);
-      let child = childProcess.spawn(tool, args);
+      args.push('--input', srcFile, '--output', destFileName);
+	  
+      fs.ensureDirSync(destDir);
+      fs.ensureDirSync(destPath + '_out');
+      
+      let options = {
+        cwd: destDir
+      }
+      let child = childProcess.spawn(tool, args, options);
 
       let output = '';
       child.stdout.on('data', (data) => output += data);
